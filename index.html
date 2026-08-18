@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICT — Rede Interativa</title>
+
+<style>
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #21382e 0%, #0b1512 70%, #050807 100%);
+}
+
+canvas {
+    display: block;
+}
+
+#info {
+    position: fixed;
+    left: 24px;
+    bottom: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    letter-spacing: .18em;
+    color: rgba(255, 255, 255, .45);
+    pointer-events: none;
+}
+
+#diagnostic {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    max-width: min(460px, calc(100vw - 80px));
+    padding: 12px 16px;
+    border-left: 3px solid #74ffd2;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, .3);
+    color: rgba(255, 255, 255, .75);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 1.6;
+    letter-spacing: .12em;
+    overflow-wrap: anywhere;
+    pointer-events: none;
+    white-space: pre-line;
+}
+
+#diagnostic.loading {
+    color: rgba(255, 200, 100, .75);
+}
+
+#diagnostic.error {
+    color: rgba(255, 100, 100, .9);
+    border-left-color: #ff6464;
+}
+
+#diagnostic.ready {
+    color: rgba(100, 255, 100, .75);
+    border-left-color: #64ff64;
+}
+</style>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    }
+}
+</script>
+</head>
+
+<body>
+<div id="info">ICT · REDE DE CONHECIMENTO</div>
+<div id="diagnostic" class="loading">THREE: OK
+GLB: CARREGANDO...</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+
+/* ==========================================================
+   CONFIG
+========================================================== */
+
+const MODEL_ROTATION_X = 0;
+const MODEL_ROTATION_Y = 0;
+const MODEL_ROTATION_Z = 0;
+const MODEL_SCALE = 1;
+
+const GLB_PATH = './logo_GLTF_final_v2.glb';
+const CAMERA_FOV = 38;
+const FRAME_PADDING = 1.25;
+const MOUSE_ROTATION_X = 0.055;
+const MOUSE_ROTATION_Y = 0.09;
+const MOUSE_ROTATION_Z = 0.10;
+const ZOOM_MIN = 0.82;
+const ZOOM_MAX = 1.20;
+
+const baseModelRotation = new THREE.Euler(
+    MODEL_ROTATION_X,
+    MODEL_ROTATION_Y,
+    MODEL_ROTATION_Z
+);
+
+
+/* ==========================================================
+   SCENE
+========================================================== */
+
+const scene = new THREE.Scene();
+let model = null;
+
+let boneCore = null;
+let boneTop = null;
+let boneBottom = null;
+let boneLeft = null;
+let boneRight = null;
+let boneDiagTR = null;
+let boneDiagBL = null;
+
+const signals = [];
+const boneRestTransforms = new Map();
+const framedModelSize = new THREE.Vector3();
+
+let breathingFactor = 1;
+let clickImpulse = 0;
+
+
+/* ==========================================================
+   CAMERA
+========================================================== */
+
+const camera = new THREE.PerspectiveCamera(
+    CAMERA_FOV,
+    window.innerWidth / window.innerHeight,
+    0.01,
+    100
+);
+
+camera.position.set(0, 0, 5);
+camera.lookAt(0, 0, 0);
+
+const modelCenter = new THREE.Vector3(0, 0, 0);
+const cameraDirection = new THREE.Vector3(0, 0, 1);
+
+let baseCameraDistance = 5;
+let zoomTarget = 1.0;
+let zoomCurrent = 1.0;
+
+
+/* ==========================================================
+   RENDERER
+========================================================== */
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+document.body.appendChild(renderer.domElement);
+
+
+/* ==========================================================
+   LIGHTING
+========================================================== */
+
+const hemisphereLight = new THREE.HemisphereLight(0xd8ffe6, 0x183325, 2);
+scene.add(hemisphereLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffe4a3, 3);
+directionalLight.position.set(2, -3, 4);
+scene.add(directionalLight);
+
+const pointLight = new THREE.PointLight(0x74ffd2, 12, 5);
+pointLight.position.set(-1, 0.5, 1);
+scene.add(pointLight);
+
+
+/* ==========================================================
+   GLB LOADER — DIAGNOSTIC
+========================================================== */
+
+const diagnostic = document.getElementById('diagnostic');
+
+function updateDiagnostic(status, message = '', progress = null) {
+    diagnostic.className = status;
+
+    if (status === 'loading') {
+        const suffix = progress === null ? '...' : ` ${Math.round(progress * 100)}%`;
+        diagnostic.textContent = `THREE: OK\nGLB: CARREGANDO${suffix}`;
+        return;
+    }
+
+    if (status === 'ready') {
+        diagnostic.textContent = 'THREE: OK\nGLB: OK';
+        return;
+    }
+
+    diagnostic.textContent = `THREE: OK\nGLB: ERRO\n\n${message}`;
+}
+
+function describeLoadError(error) {
+    const status = error?.target?.status;
+    const statusText = error?.target?.statusText;
+
+    if (status === 404) {
+        return `MODELO GLB NÃO ENCONTRADO\nCaminho: ${GLB_PATH}`;
+    }
+
+    const httpDetail = status
+        ? `\nHTTP: ${status}${statusText ? ` ${statusText}` : ''}`
+        : '';
+
+    return `Falha ao carregar o modelo GLB.\nCaminho: ${GLB_PATH}${httpDetail}`;
+}
+
+
+/* ==========================================================
+   AUTO FRAME
+========================================================== */
+
+function autoFrameModel(object) {
+    object.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(object);
+
+    if (box.isEmpty()) {
+        throw new Error('O GLB foi carregado, mas não possui limites visíveis.');
+    }
+
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const maxDimension = Math.max(size.x, size.y, size.z);
+
+    if (!Number.isFinite(maxDimension) || maxDimension <= 0) {
+        throw new Error('Não foi possível calcular o tamanho do modelo.');
+    }
+
+    // Move somente o objeto raiz. A geometria do GLB permanece intacta.
+    object.position.sub(center);
+    object.updateMatrixWorld(true);
+
+    framedModelSize.copy(size);
+    fitCameraToSize(framedModelSize);
+
+    console.log('=== AUTO FRAME ===');
+    console.log('Centro original:', center);
+    console.log('Tamanho:', size);
+    console.log('Distância da câmera:', baseCameraDistance);
+}
+
+function fitCameraToSize(size) {
+    const maxDimension = Math.max(size.x, size.y, size.z);
+
+    const verticalFov = THREE.MathUtils.degToRad(camera.fov);
+    const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * camera.aspect);
+    const fitHeightDistance = size.y / (2 * Math.tan(verticalFov / 2));
+    const fitWidthDistance = size.x / (2 * Math.tan(horizontalFov / 2));
+    baseCameraDistance = (
+        Math.max(fitHeightDistance, fitWidthDistance) + size.z / 2
+    ) * FRAME_PADDING;
+
+    camera.near = Math.max(baseCameraDistance * ZOOM_MIN / 1000, 0.001);
+    camera.far = Math.max(
+        baseCameraDistance * ZOOM_MAX + maxDimension * 10,
+        100
+    );
+    updateCameraZoom();
+    camera.updateProjectionMatrix();
+}
+
+function updateCameraZoom() {
+    camera.position.copy(cameraDirection)
+        .multiplyScalar(baseCameraDistance * zoomCurrent)
+        .add(modelCenter);
+
+    camera.lookAt(modelCenter);
+}
+
+
+/* ==========================================================
+   MODEL INSPECTION
+========================================================== */
+
+const inspectedNames = [
+    'ICTCEBH_SIGNAL_',
+    'ICTCEBH_TRAIL_',
+    'B_CORE',
+    'B_TOP',
+    'B_BOTTOM',
+    'B_LEFT',
+    'B_RIGHT',
+    'B_DIAG_TR',
+    'B_DIAG_BL'
+];
+
+function inspectGLB(object) {
+    let meshCount = 0;
+    let boneCount = 0;
+    let signalCount = 0;
+    const detectedObjects = [];
+
+    object.traverse(obj => {
+        console.log(obj.name, obj.type);
+
+        if (obj.isMesh) meshCount++;
+        if (obj.isBone) boneCount++;
+        if (obj.name.includes('ICTCEBH_SIGNAL_')) signalCount++;
+
+        if (inspectedNames.some(name => obj.name.includes(name))) {
+            detectedObjects.push(obj.name);
+        }
+    });
+
+    console.log('=== ICTCEBH GLB ===');
+    console.log(`Meshes: ${meshCount}`);
+    console.log(`Bones: ${boneCount}`);
+    console.log(`Signals: ${signalCount}`);
+    console.log('Objetos ICTCEBH detectados:', detectedObjects);
+
+    return { meshCount, boneCount, signalCount, detectedObjects };
+}
+
+function rememberBoneTransform(bone) {
+    if (!bone) return;
+
+    boneRestTransforms.set(bone, {
+        position: bone.position.clone(),
+        rotation: bone.rotation.clone()
+    });
+}
+
+function restoreBoneTransform(bone) {
+    const rest = boneRestTransforms.get(bone);
+    if (!bone || !rest) return false;
+
+    bone.position.copy(rest.position);
+    bone.rotation.copy(rest.rotation);
+    return true;
+}
+
+
+/* ==========================================================
+   GLB LOADER — LOAD
+========================================================== */
+
+const loader = new GLTFLoader();
+updateDiagnostic('loading');
+
+loader.load(
+    GLB_PATH,
+    gltf => {
+        model = gltf.scene;
+        model.rotation.set(MODEL_ROTATION_X, MODEL_ROTATION_Y, MODEL_ROTATION_Z);
+        model.scale.setScalar(MODEL_SCALE);
+        scene.add(model);
+
+        try {
+            inspectGLB(model);
+
+            signals.length = 0;
+            model.traverse(object => {
+                if (object.name.includes('ICTCEBH_SIGNAL_')) {
+                    signals.push(object);
+                }
+            });
+
+            boneCore = model.getObjectByName('B_CORE');
+            boneTop = model.getObjectByName('B_TOP');
+            boneBottom = model.getObjectByName('B_BOTTOM');
+            boneLeft = model.getObjectByName('B_LEFT');
+            boneRight = model.getObjectByName('B_RIGHT');
+            boneDiagTR = model.getObjectByName('B_DIAG_TR');
+            boneDiagBL = model.getObjectByName('B_DIAG_BL');
+
+            boneRestTransforms.clear();
+            [
+                boneCore,
+                boneTop,
+                boneBottom,
+                boneLeft,
+                boneRight,
+                boneDiagTR,
+                boneDiagBL
+            ].forEach(rememberBoneTransform);
+
+            console.log('boneCore:', boneCore);
+            console.log('boneTop:', boneTop);
+            console.log('boneBottom:', boneBottom);
+            console.log('boneLeft:', boneLeft);
+            console.log('boneRight:', boneRight);
+            console.log('boneDiagTR:', boneDiagTR);
+            console.log('boneDiagBL:', boneDiagBL);
+
+            autoFrameModel(model);
+
+            if (gltf.animations?.length) {
+                console.log(`Animações GLB encontradas: ${gltf.animations.length}`);
+            }
+
+            updateDiagnostic('ready');
+        }
+        catch (error) {
+            console.error('Erro preparando o GLB:', error);
+            updateDiagnostic('error', error.message);
+        }
+    },
+    progress => {
+        const progressRatio = progress.total > 0
+            ? progress.loaded / progress.total
+            : null;
+
+        updateDiagnostic('loading', '', progressRatio);
+    },
+    error => {
+        console.error(`Erro carregando GLB em ${GLB_PATH}:`, error);
+        updateDiagnostic('error', describeLoadError(error));
+    }
+);
+
+
+/* ==========================================================
+   MOUSE
+========================================================== */
+
+const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+let mouseSpeed = 0;
+let lastPointerX = null;
+let lastPointerY = null;
+
+window.addEventListener('pointermove', event => {
+    mouse.targetX = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.targetY = -((event.clientY / window.innerHeight) * 2 - 1);
+
+    if (lastPointerX !== null && lastPointerY !== null) {
+        const dx = event.clientX - lastPointerX;
+        const dy = event.clientY - lastPointerY;
+        mouseSpeed = Math.min(Math.hypot(dx, dy) / 100, 1);
+    }
+
+    lastPointerX = event.clientX;
+    lastPointerY = event.clientY;
+});
+
+function updateInteraction() {
+    if (!model) return;
+
+    mouse.x += (mouse.targetX - mouse.x) * 0.045;
+    mouse.y += (mouse.targetY - mouse.y) * 0.045;
+    mouseSpeed *= 0.94;
+
+    model.rotation.x = baseModelRotation.x + mouse.y * MOUSE_ROTATION_X;
+    model.rotation.y = baseModelRotation.y + mouse.x * MOUSE_ROTATION_Y;
+    model.rotation.z = baseModelRotation.z + mouse.x * MOUSE_ROTATION_Z;
+
+    if (restoreBoneTransform(boneTop)) {
+        boneTop.position.x += mouse.x * 0.035;
+        boneTop.position.z += mouse.y * 0.025;
+    }
+
+    if (restoreBoneTransform(boneBottom)) {
+        boneBottom.position.x -= mouse.x * 0.025;
+        boneBottom.position.z -= mouse.y * 0.020;
+    }
+
+    if (restoreBoneTransform(boneRight)) {
+        boneRight.position.x += mouse.x * 0.045;
+        boneRight.rotation.z += mouse.y * 0.08;
+    }
+
+    if (restoreBoneTransform(boneLeft)) {
+        boneLeft.position.x += mouse.x * 0.025;
+        boneLeft.rotation.z -= mouse.y * 0.08;
+    }
+
+    if (restoreBoneTransform(boneDiagTR)) {
+        boneDiagTR.rotation.y += mouse.x * 0.14;
+        boneDiagTR.rotation.x += mouse.y * 0.10;
+    }
+
+    if (restoreBoneTransform(boneDiagBL)) {
+        boneDiagBL.rotation.y -= mouse.x * 0.12;
+        boneDiagBL.rotation.x -= mouse.y * 0.08;
+    }
+
+    if (restoreBoneTransform(boneCore)) {
+        boneCore.position.y += mouse.y * 0.06;
+        boneCore.rotation.z += mouse.x * 0.10;
+    }
+}
+
+
+/* ==========================================================
+   BREATHING
+========================================================== */
+
+function updateBreathing(time) {
+    const breathing = Math.sin(time * 0.0015);
+    breathingFactor = 1 + breathing * 0.012 + mouseSpeed * 0.015;
+}
+
+
+/* ==========================================================
+   SIGNALS
+========================================================== */
+
+function updateSignals(time) {
+    signals.forEach((signal, index) => {
+        const phase = index * 0.75;
+        const speed = 0.00035 + index * 0.000035;
+        const radius = 0.17 + (index % 3) * 0.055;
+        const angle = time * speed + phase;
+
+        signal.position.x = Math.cos(angle) * radius;
+        signal.position.z = Math.sin(angle) * radius;
+        signal.position.y = Math.sin(angle * 2) * 0.055;
+
+        const pulse = 0.85 + Math.sin(angle * 3) * 0.18;
+        signal.scale.setScalar(pulse);
+    });
+}
+
+
+/* ==========================================================
+   CLICK IMPULSE
+========================================================== */
+
+window.addEventListener('pointerdown', () => {
+    clickImpulse = Math.min(clickImpulse + 0.7, 1);
+});
+
+function updateImpulse() {
+    clickImpulse *= 0.88;
+    if (clickImpulse < 0.001) clickImpulse = 0;
+}
+
+function applyModelScale() {
+    if (!model) return;
+
+    const impulseFactor = 1 + clickImpulse * 0.045;
+    model.scale.setScalar(MODEL_SCALE * breathingFactor * impulseFactor);
+}
+
+
+/* ==========================================================
+   CAMERA ZOOM
+========================================================== */
+
+window.addEventListener('wheel', event => {
+    event.preventDefault();
+    zoomTarget += event.deltaY * 0.0005;
+    zoomTarget = THREE.MathUtils.clamp(zoomTarget, ZOOM_MIN, ZOOM_MAX);
+}, { passive: false });
+
+function updateZoom() {
+    zoomCurrent += (zoomTarget - zoomCurrent) * 0.08;
+    updateCameraZoom();
+}
+
+
+/* ==========================================================
+   RESIZE
+========================================================== */
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    if (model) fitCameraToSize(framedModelSize);
+});
+
+
+/* ==========================================================
+   ANIMATION LOOP
+========================================================== */
+
+function animate(time) {
+    requestAnimationFrame(animate);
+
+    updateInteraction();
+    updateBreathing(time);
+    updateSignals(time);
+    updateImpulse();
+    applyModelScale();
+    updateZoom();
+
+    renderer.render(scene, camera);
+}
+
+animate();
+</script>
+</body>
+</html>
