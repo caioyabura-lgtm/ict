@@ -1,0 +1,43 @@
+{
+  "viewports": [
+    {
+      "width": 1440,
+      "overflow": false,
+      "menu": "desktop"
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "menu": "passed"
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "menu": "passed"
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "menu": "passed"
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "menu": "passed"
+    }
+  ],
+  "model_loaded": true,
+  "model_interaction_render_changed": true,
+  "preserved": {
+    "assets/js/model.js": true,
+    "assets/models/logo_GLTF_final_v2.glb": true
+  },
+  "internal_links": "passed",
+  "form": {
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLSdFIVj0oU8YCN4-kZumlo0f-pbJ8ff3hQR2CYJMV2gowPSMNA/viewform",
+    "title": "Cadastro na Rede de Pesquisadores",
+    "text": "Cadastro na Rede de Pesquisadores\n\nOlá, pessoal! O ICT Synapse da Cooperativa dos Empreendedores está iniciando os trabalhos! \n\nPeço a gentileza de preencher este cadastro, que tem como objetivo consolidar uma rede multidisciplinar de profissionais (especialistas, mestres, doutores e pós-doutores) interessados em colaborar com projetos de inovação e desenvolvimento tecnológico.\n\nBuscamos conectar o conhecimento acadêmico a iniciativas práticas que gerem impacto real na sociedade e no ecossistema"
+  },
+  "reduced_motion": "passed",
+  "page_errors": []
+}

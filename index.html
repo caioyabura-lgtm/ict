@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/institutional.css">
     <script type="importmap">
     {
         "imports": {
@@ -27,17 +28,19 @@
         <div class="container header-inner">
             <a class="brand" href="#inicio" aria-label="ICT Synapse — início">
                 <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-                <span class="brand-name">ICT <strong>SYNAPSE</strong></span>
+                <span class="brand-lockup"><span class="brand-name">ICT <strong>SYNAPSE</strong></span><small>Cooperativa dos Empreendedores</small></span>
             </a>
             <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" data-menu-toggle>
                 <span class="sr-only">Abrir menu</span><span></span><span></span>
             </button>
             <nav class="main-nav" id="main-navigation" aria-label="Navegação principal" data-menu>
+                <a href="#inicio">Início</a>
                 <a href="#instituto">O Instituto</a>
                 <a href="#rede">A Rede</a>
-                <a href="#oportunidades">Oportunidades</a>
+                <a href="#departamentos">Departamentos</a>
+                <a href="#oportunidades">Projetos &amp; Oportunidades</a>
+                <a href="#plataforma">A Plataforma</a>
                 <a href="#contato">Contato</a>
-                <a class="button button-small button-outline" href="#proposta">Conheça a proposta</a>
             </nav>
         </div>
     </header>
@@ -50,11 +53,8 @@
                     <p class="eyebrow"><span></span> Pesquisa · Desenvolvimento · Inovação</p>
                     <h1 id="hero-title">Ciência, tecnologia e <em>inteligência em rede.</em></h1>
                     <p class="hero-lead">O ICT Synapse conecta pesquisadores, conhecimento e desafios reais em uma infraestrutura cooperativa de pesquisa, desenvolvimento e inovação.</p>
-                    <div class="hero-actions">
-                        <a class="button button-primary" href="#instituto">Descobrir o ICT Synapse <span aria-hidden="true">↗</span></a>
-                        <a class="text-link" href="#rede">Conhecer a rede <span aria-hidden="true">↓</span></a>
-                    </div>
-                    <div class="hero-note"><span class="pulse-dot" aria-hidden="true"></span><p><strong>Uma rede em construção.</strong> Um protótipo consistente para uma oportunidade concreta.</p></div>
+                    <div class="hero-actions"><a class="button button-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdFIVj0oU8YCN4-kZumlo0f-pbJ8ff3hQR2CYJMV2gowPSMNA/viewform" target="_blank" rel="noopener noreferrer">Integrar a Rede de Pesquisadores <span aria-hidden="true">↗</span></a><a class="text-link" href="#instituto">Conhecer o ICT <span aria-hidden="true">↓</span></a></div>
+                    <div class="hero-note"><span class="pulse-dot" aria-hidden="true"></span><p><strong>Uma rede em construção.</strong> Conhecimento compartilhado, pesquisa aplicada e cooperação.</p></div>
                 </div>
                 <div class="model-wrap reveal" data-reveal-delay="120">
                     <div class="model-orbit orbit-one" aria-hidden="true"></div>
@@ -70,7 +70,20 @@
             <div class="hero-index" aria-hidden="true">01 <span></span> SYNAPSE</div>
         </section>
 
-        <section class="flow-section section" id="rede" aria-labelledby="flow-title">
+
+        <section class="timeline-section section" id="trajetoria" aria-labelledby="timeline-title">
+            <div class="container">
+                <div class="section-heading reveal"><p class="eyebrow eyebrow-dark"><span></span> Trajetória da Cooperativa</p><h2 id="timeline-title">Uma trajetória que <em>antecede o ICT.</em></h2></div>
+                <ol class="timeline reveal">
+                    <li><time datetime="2008">2008</time><h3>Pesquisa Aplicada</h3><p>Inventário de Proteção ao Acervo Cultural de Santana dos Montes / MG.</p></li>
+                    <li><time datetime="2022">2022</time><h3>Pesquisa em Geociências</h3><p>Desigualdades socioespaciais e descentralização territorial no Brasil.</p></li>
+                    <li><time datetime="2023">2023</time><h3>Coolaborativa / SEED</h3><p>Aceleração da atuação em inovação.</p></li>
+                    <li><time datetime="2026">2026</time><h3>ICT Synapse</h3><p>Consolidação de uma rede cooperativa de pesquisadores.</p></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="flow-section section" id="conexoes" aria-labelledby="flow-title">
             <div class="container">
                 <div class="section-heading heading-split reveal">
                     <div><p class="eyebrow eyebrow-dark"><span></span> O problema / A oportunidade</p><h2 id="flow-title">Transformando capital intelectual disperso em uma <em>rede ativa.</em></h2></div>
@@ -92,7 +105,12 @@
                     <p class="eyebrow"><span></span> O que é o ICT Synapse</p>
                     <h2 id="about-title">Uma infraestrutura cooperativa para fazer a ciência <em>circular.</em></h2>
                     <p>O ICT Synapse nasce para reunir competências científicas, capacidade técnica e visão de futuro. Uma iniciativa da Cooperativa dos Empreendedores para estimular pesquisa aplicada, inovação e desenvolvimento em rede.</p>
-                    <a class="text-link text-link-light" href="#proposta">Nossa visão de futuro <span aria-hidden="true">↗</span></a>
+<div class="institution-principles">
+                        <article><h3>Missão</h3><p>Conectar ciência e desafios reais para promover desenvolvimento por meio da cooperação.</p></article>
+                        <article><h3>Gestão do conhecimento</h3><p>Articular saberes, valorizar a produção científica e estimular sua circulação entre pessoas e instituições.</p></article>
+                        <article><h3>Governança</h3><p>Orientar a atuação em rede pela responsabilidade compartilhada e pela participação cooperativa.</p></article>
+                    </div>
+                    <a class="text-link text-link-light" href="#plataforma">Nossa visão de futuro <span aria-hidden="true">↗</span></a>
                 </div>
                 <div class="pillar-list">
                     <article class="pillar-card reveal" data-reveal-delay="60"><span class="pillar-index">01</span><div class="pillar-symbol symbol-research" aria-hidden="true"><i></i><i></i><i></i></div><h3>Pesquisa Aplicada</h3><p>Conhecimento orientado a demandas concretas, capaz de gerar soluções relevantes para organizações e territórios.</p></article>
@@ -102,7 +120,7 @@
             </div>
         </section>
 
-        <section class="audience-section section" aria-labelledby="audience-title">
+        <section class="audience-section section" id="rede" aria-labelledby="audience-title">
             <div class="container">
                 <div class="section-heading centered reveal"><p class="eyebrow eyebrow-dark"><span></span> Para quem</p><h2 id="audience-title">Uma rede feita por quem acredita no <em>conhecimento compartilhado.</em></h2><p>Diferentes atores, um mesmo ambiente de colaboração.</p></div>
                 <div class="audience-grid">
@@ -113,10 +131,33 @@
                     <article class="audience-card reveal" data-reveal-delay="40"><span class="audience-icon" aria-hidden="true">⌂</span><h3>Poder Público</h3><p>Inteligência técnica para políticas, programas e impacto territorial.</p><span class="card-arrow" aria-hidden="true">↗</span></article>
                     <article class="audience-card reveal" data-reveal-delay="80"><span class="audience-icon" aria-hidden="true">✣</span><h3>Parceiros de inovação</h3><p>Um ponto de encontro para construir iniciativas de valor conjunto.</p><span class="card-arrow" aria-hidden="true">↗</span></article>
                 </div>
+                <div class="section-actions reveal"><a class="button button-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdFIVj0oU8YCN4-kZumlo0f-pbJ8ff3hQR2CYJMV2gowPSMNA/viewform" target="_blank" rel="noopener noreferrer">Integrar a Rede de Pesquisadores <span aria-hidden="true">↗</span></a></div>
             </div>
         </section>
 
-        <section class="benefits-section section" id="oportunidades" aria-labelledby="benefits-title">
+        <section class="departments-section section" id="departamentos" aria-labelledby="departments-title">
+            <div class="container">
+                <div class="section-heading heading-split reveal"><div><p class="eyebrow"><span></span> Departamentos</p><h2 id="departments-title">Competências organizadas em <em>estruturas especializadas.</em></h2></div><p>O ICT Synapse estrutura departamentos e núcleos especializados capazes de transformar conhecimento, infraestrutura e redes profissionais em capacidade permanente de pesquisa e realização.</p></div>
+                <div class="department-grid">
+                    <article class="department-card reveal"><p class="eyebrow">Departamento especializado do ICT Synapse</p><h3>Núcleo de Tecnologias do Espetáculo</h3><p>Estrutura dedicada à pesquisa aplicada, desenvolvimento, prototipagem e articulação de tecnologias para artes, espetáculo, audiovisual, som, fabricação digital e ambientes interativos.</p><a class="button button-primary" href="#nucleo">Conhecer o Núcleo <span aria-hidden="true">↓</span></a>
+                        <div id="nucleo" class="nucleus-areas"><h4>Áreas de atuação</h4><ul><li>Som e espacialização</li><li>Audiovisual</li><li>Fabricação digital</li><li>Eletrônica criativa</li><li>Interação e imersão</li><li>Pesquisa aplicada</li><li>Formação</li><li>Coprodução internacional</li></ul></div>
+                    </article>
+                    <div class="hierarchy-wrap reveal"><p class="eyebrow">Arquitetura institucional</p><ol class="hierarchy" aria-label="Hierarquia institucional, da Cooperativa aos projetos"><li>Cooperativa dos Empreendedores</li><li>ICT Synapse</li><li>Núcleo de Tecnologias do Espetáculo</li><li>Fab Lab Acousmonium</li><li>Programas · Laboratórios · Projetos</li></ol></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="projects-section section" id="oportunidades" aria-labelledby="projects-title">
+            <div class="container"><div class="section-heading reveal"><p class="eyebrow eyebrow-dark"><span></span> Projetos &amp; Oportunidades</p><h2 id="projects-title">Caminhos para pesquisar, <em>criar e cooperar.</em></h2><p class="demo-note">Estrutura demonstrativa — integração editorial prevista para fase posterior.</p></div>
+                <div class="project-grid">
+                    <article class="project-card reveal"><div class="project-art art-sound" aria-hidden="true"><span>01 / PESQUISA</span><i></i><i></i><i></i></div><div class="project-copy"><p class="eyebrow eyebrow-dark">Projetos em desenvolvimento</p><h3>Pesquisa em som e espacialização</h3><p>Exemplo de apresentação de uma linha de pesquisa sobre experiências sonoras e ambientes imersivos.</p><dl><div><dt>Área</dt><dd>Tecnologias do espetáculo</dd></div><div><dt>Departamento</dt><dd>Núcleo de Tecnologias do Espetáculo</dd></div><div><dt>Status</dt><dd>Exemplo demonstrativo</dd></div><div><dt>Prazo</dt><dd>Não se aplica nesta demonstração</dd></div></dl></div></article>
+                    <article class="project-card reveal"><div class="project-art art-network" aria-hidden="true"><span>02 / COOPERAÇÃO</span><i></i><i></i><i></i></div><div class="project-copy"><p class="eyebrow eyebrow-dark">Mural de Inovação Aberta</p><h3>Desafios para conectar competências</h3><p>Exemplo de espaço para apresentar demandas de parceiros e possibilidades de cooperação científica.</p><dl><div><dt>Área</dt><dd>Pesquisa aplicada e inovação</dd></div><div><dt>Departamento</dt><dd>A definir em publicação futura</dd></div><div><dt>Status</dt><dd>Exemplo demonstrativo</dd></div><div><dt>Prazo</dt><dd>Sem chamada aberta</dd></div></dl></div></article>
+                    <article class="project-card reveal"><div class="project-art art-funding" aria-hidden="true"><span>03 / FOMENTO</span><i></i><i></i><i></i></div><div class="project-copy"><p class="eyebrow eyebrow-dark">Fomento</p><h3>Possibilidades de apoio à pesquisa</h3><p>Exemplo de apresentação de editais e programas de apoio à pesquisa, ao desenvolvimento e à inovação.</p><dl><div><dt>Área</dt><dd>Financiamento à pesquisa</dd></div><div><dt>Departamento</dt><dd>Transversal ao ICT Synapse</dd></div><div><dt>Status</dt><dd>Exemplo demonstrativo</dd></div><div><dt>Prazo</dt><dd>Sem edital ou inscrição vigente</dd></div></dl></div></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="benefits-section section" id="cooperacao" aria-labelledby="benefits-title">
             <div class="container">
                 <div class="benefits-top reveal"><div><p class="eyebrow"><span></span> Oportunidades</p><h2 id="benefits-title">Conexões que ampliam o alcance da <em>ciência.</em></h2></div><p>O valor da rede está na capacidade de transformar cooperação em caminhos sustentáveis para pesquisar, inovar e gerar impacto.</p></div>
                 <div class="benefits-list">
@@ -128,10 +169,15 @@
             </div>
         </section>
 
-        <section class="roadmap-section section" id="proposta" aria-labelledby="roadmap-title">
+        <section class="roadmap-section section" id="plataforma" aria-labelledby="roadmap-title">
             <div class="roadmap-grid-bg" aria-hidden="true"></div>
             <div class="container">
-                <div class="roadmap-heading reveal"><div><div class="roadmap-label"><span>Visão de futuro</span> Roadmap conceitual</div><h2 id="roadmap-title">Uma infraestrutura que pode <em>crescer com a rede.</em></h2></div><p>Esta é uma visão de evolução — não representa funcionalidades já disponíveis. A próxima etapa poderá transformar conexões em uma infraestrutura digital integrada.</p></div>
+                <div class="roadmap-heading reveal"><div><span id="proposta" aria-hidden="true"></span><div class="roadmap-label"><span>A Plataforma</span> Roadmap conceitual</div><h2 id="roadmap-title">Uma infraestrutura que pode <em>crescer com a rede.</em></h2></div><p>Esta é uma visão de evolução — não representa funcionalidades já disponíveis. A próxima etapa poderá transformar conexões em uma infraestrutura digital integrada.</p></div>
+                <div class="roadmap-levels reveal">
+                    <article><p class="eyebrow eyebrow-dark">01 / Hoje</p><h3>Apresentação e conexão</h3><ul><li>Portal institucional</li><li>Experiência 3D</li><li>Rede de pesquisadores — adesão pelo formulário externo</li><li>Apresentação comercial</li></ul></article>
+                    <article><p class="eyebrow eyebrow-dark">02 / Próxima etapa</p><h3>Publicação e conteúdo</h3><ul><li>CMS</li><li>Atualização descentralizada</li><li>Projetos</li><li>Oportunidades</li><li>Departamentos</li><li>Gestão editorial</li></ul></article>
+                    <article><p class="eyebrow eyebrow-dark">03 / Visão futura</p><h3>Inteligência da rede</h3><ul><li>Dashboard</li><li>Células regionais</li><li>Indicadores</li><li>Gestão de projetos</li><li>Inteligência da rede</li></ul></article>
+                </div>
                 <div class="roadmap-visual reveal" aria-label="Visão conceitual das possibilidades futuras do ICT Synapse">
                     <div class="roadmap-core"><span class="core-ring"></span><strong>ICT</strong><small>Synapse</small></div>
                     <div class="roadmap-path path-one" aria-hidden="true"></div><div class="roadmap-path path-two" aria-hidden="true"></div><div class="roadmap-path path-three" aria-hidden="true"></div>
@@ -142,7 +188,7 @@
                     <div class="roadmap-node node-five"><span>05</span><strong>Indicadores</strong><small>Possibilidade futura</small></div>
                     <div class="roadmap-node node-six"><span>06</span><strong>Acompanhamento</strong><small>Possibilidade futura</small></div>
                 </div>
-                <p class="roadmap-disclaimer reveal"><span aria-hidden="true">i</span> Visualização ilustrativa de um roadmap. Não se trata de dashboard, sistema operacional ou demonstração de dados reais.</p>
+                <p class="roadmap-disclaimer reveal"><span aria-hidden="true">i</span> Roadmap conceitual. As funcionalidades apresentadas nesta seção não correspondem necessariamente a módulos já implementados.</p>
             </div>
         </section>
 
@@ -152,7 +198,7 @@
                 <p class="eyebrow"><span></span> Faça parte desta construção</p>
                 <h2 id="cta-title">Vamos construir a próxima etapa <em>desta rede.</em></h2>
                 <p>O ICT Synapse está em fase de estruturação e desenvolvimento de sua plataforma digital. Buscamos parceiros, projetos e oportunidades para ampliar esta infraestrutura.</p>
-                <div class="cta-actions"><a class="button button-light" href="mailto:contato@ictsynapse.com.br?subject=Quero%20conhecer%20o%20ICT%20Synapse">Falar com a equipe <span aria-hidden="true">↗</span></a><a class="button button-ghost" href="mailto:contato@ictsynapse.com.br?subject=Oportunidade%20de%20parceria%20com%20o%20ICT%20Synapse">Conhecer oportunidades de parceria</a></div>
+                <div class="cta-actions"><a class="button button-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdFIVj0oU8YCN4-kZumlo0f-pbJ8ff3hQR2CYJMV2gowPSMNA/viewform" target="_blank" rel="noopener noreferrer">Integrar a Rede de Pesquisadores <span aria-hidden="true">↗</span></a><a class="button button-ghost" href="mailto:contato@ictsynapse.com.br?subject=Parcerias%20Institucionais">Parcerias Institucionais <span aria-hidden="true">↗</span></a></div>
                 <p class="contact-caption">Contato institucional · Cooperativa dos Empreendedores</p>
             </div>
         </section>
@@ -161,7 +207,7 @@
     <footer class="site-footer">
         <div class="container footer-main">
             <div class="footer-brand"><a class="brand brand-footer" href="#inicio" aria-label="ICT Synapse — início"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span><span class="brand-name">ICT <strong>SYNAPSE</strong></span></a><p>Ciência, tecnologia e inteligência em rede.</p></div>
-            <div class="footer-links"><div><strong>Navegação</strong><a href="#instituto">O Instituto</a><a href="#rede">A Rede</a><a href="#oportunidades">Oportunidades</a></div><div><strong>Contato</strong><a href="mailto:contato@ictsynapse.com.br">contato@ictsynapse.com.br</a><span>Cooperativa dos Empreendedores</span></div></div>
+            <div class="footer-links"><div><strong>Navegação</strong><a href="#instituto">O Instituto</a><a href="#rede">A Rede</a><a href="#departamentos">Departamentos</a><a href="#oportunidades">Projetos &amp; Oportunidades</a><a href="#plataforma">A Plataforma</a></div><div><strong>Contato</strong><a href="mailto:contato@ictsynapse.com.br">contato@ictsynapse.com.br</a><span>Cooperativa dos Empreendedores</span></div></div>
         </div>
         <div class="container footer-bottom">
             <div class="footer-legal">
@@ -170,6 +216,7 @@
             </div>
             <span>Protótipo institucional · Versão demonstrativa</span>
         </div>
+        <p class="container prototype-note">Protótipo visual institucional. Módulos dinâmicos, integrações e funcionalidades operacionais estão sujeitos a desenvolvimento e contratação específicos.</p>
     </footer>
     <script type="module" src="assets/js/model.js"></script>
     <script src="assets/js/main.js"></script>
