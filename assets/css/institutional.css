@@ -5,7 +5,15 @@
 .hero-actions{flex-wrap:wrap;gap:14px 25px}.button{padding-block:14px;text-align:center}.button-primary{color:var(--coop-black);background:var(--coop-orange)}.button-primary:hover{background:var(--ict-paper);color:var(--coop-black);border-color:var(--coop-orange)}
 :focus-visible{outline:3px solid var(--coop-orange);outline-offset:5px}.button-primary:focus-visible{outline-color:var(--coop-white);box-shadow:0 0 0 7px var(--coop-black)}
 .hero-note p,.model-hint,.network-tag,.model-loader,.about-intro>p:not(.eyebrow),.pillar-card p,.benefits-top>p,.benefit-row p,.cta-inner>p:not(.eyebrow):not(.contact-caption),.contact-caption,.footer-brand>p,.footer-links a,.footer-links span,.footer-bottom,.author-credit,.author-credit a{color:var(--ict-paper)}
-.about-section{background:var(--coop-olive-dark);border-top:12px solid var(--coop-olive)}.about-intro{position:static}.about-intro h2 em{color:var(--coop-white)}.pillar-index{color:var(--ict-paper)}
+.about-section{color:var(--ict-green-deep);background:var(--ict-paper);border-top:12px solid var(--coop-olive)}
+.about-intro{position:static}
+.about-section .about-intro h2 em,.about-section .eyebrow,.about-section .pillar-index{color:var(--coop-olive-dark)}
+.about-section .about-intro>p:not(.eyebrow),.about-section .pillar-card p,.about-section .institution-principles p{color:var(--coop-charcoal)}
+.about-section .text-link,.about-section .text-link span{color:var(--ict-green);border-color:var(--ict-green)}
+.about-section .pillar-list,.about-section .pillar-card,.about-section .institution-principles article{border-color:var(--line)}
+.about-section .pillar-symbol i{border-color:var(--ict-green)}
+.about-section .symbol-governance i:nth-child(2){border-color:var(--coop-olive-dark)}
+.about-section .symbol-national::before{border-color:var(--ict-green)}
 .institution-principles{margin:32px 0}.institution-principles article{border-top:1px solid var(--white-line);padding:18px 0}.institution-principles h3{font:600 15px var(--display);margin:0 0 9px}.institution-principles p{font-size:13px;line-height:1.7;margin:0}
 .timeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));list-style:none;padding:0;margin:65px 0 0}.timeline li{position:relative;padding:30px 26px 0 0;border-top:1px solid var(--line)}.timeline li::before{content:"";position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;background:var(--coop-olive)}.timeline li:nth-child(3)::before{background:var(--coop-orange)}.timeline li:last-child::before{background:var(--ict-green)}.timeline time{font:500 44px var(--display);letter-spacing:-.05em;color:var(--coop-olive-dark)}.timeline li:last-child time{color:var(--ict-green)}.timeline h3{font:600 17px/1.4 var(--display);margin:20px 0 10px}.timeline p{font-size:14px;line-height:1.7;margin:0;color:var(--ink-soft)}
 .section-actions{margin-top:36px;text-align:center}.audience-card .card-arrow{display:none}.audience-card:hover p{color:var(--coop-white)}
