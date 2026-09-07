@@ -1,23 +1,15 @@
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 import json
-from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
-from threading import Thread
-server = ThreadingHTTPServer(('127.0.0.1', 8877), SimpleHTTPRequestHandler)
-Thread(target=server.serve_forever, daemon=True).start()
 
 with sync_playwright() as p:
     browser = p.chromium.launch(executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe', headless=True, args=['--enable-unsafe-swiftshader'])
     page = browser.new_page(viewport={'width':1440,'height':1000},device_scale_factor=1)
     errors=[]
     page.on('pageerror',lambda e:errors.append(str(e)))
-    page.goto('http://127.0.0.1:8877',wait_until='networkidle')
+    page.goto('http://127.0.0.1:8765',wait_until='networkidle')
     page.wait_for_selector('#model-loader.hidden',timeout=60000,state='attached')
     assert page.locator('#model-stage canvas').count()==1
-    assert page.evaluate('window.CMS.enabled === false && Object.values(window.CMS.endpoints).every(x => x === null)')
-    assert page.evaluate("async () => (await CMS.get('projetos')) === null && (await CMS.get('invalido')) === null")
-    assert page.locator('[data-cms-list] .project-card').count()==4
-    assert page.locator('.coop-logo').evaluate_all('(images) => images.length === 2 && images.every(i => i.complete && i.naturalWidth > 0)')
     assert page.evaluate('''() => [...document.querySelectorAll('a[href^="#"]')].every(a=>document.getElementById(a.hash.slice(1)))''')
     assert page.evaluate('''() => {const ids=[...document.querySelectorAll('[id]')].map(x=>x.id);return ids.length===new Set(ids).size}''')
     shots=Path('verification');shots.mkdir(exist_ok=True)
@@ -33,7 +25,7 @@ with sync_playwright() as p:
             page.keyboard.press('Escape')
             assert page.locator('[data-menu-toggle]').get_attribute('aria-expanded')=='false'
             page.locator('[data-menu-toggle]').click()
-            page.locator('.main-nav a[href="#iniciativas"]').click()
+            page.locator('.main-nav a[href="#departamentos"]').click()
             assert page.locator('[data-menu-toggle]').get_attribute('aria-expanded')=='false'
         page.evaluate('scrollTo(0,0)');page.wait_for_timeout(900)
         if width in [1440,390]:page.screenshot(path=str(shots/f'portal-{width}.png'),full_page=True)
@@ -61,7 +53,7 @@ with sync_playwright() as p:
     assert not errors,errors
     hashes={}
     for f in ['assets/js/model.js','assets/models/logo_GLTF_final_v2.glb']:
-        hashes[f]=Path(f).read_bytes()==Path('backups/20260907-institucional',f).read_bytes()
+        hashes[f]=Path(f).read_bytes()==Path('backups/20260906-154910',f).read_bytes()
         assert hashes[f]
     report={'viewports':results,'model_loaded':True,'model_interaction_render_changed':True,'preserved':hashes,'internal_links':'passed','form':form_result,'reduced_motion':'passed','page_errors':errors}
     (shots/'results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')

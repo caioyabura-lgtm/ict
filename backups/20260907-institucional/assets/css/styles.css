@@ -1,15 +1,12 @@
-/* Paleta institucional oficial e aliases do sistema visual aprovado. */
+/* Valores da Cooperativa aproximados da referência; substituir aqui pelo manual oficial. */
 :root {
   --coop-olive: #968E1B;
   --coop-olive-dark: #5E5A16;
-  --coop-orange: #E5520E;
+  --coop-orange: #F26322;
   --coop-black: #080C0F;
   --coop-charcoal: #1F1F22;
   --coop-white: #FFFFFF;
-  --ict-deep-green: #0C1C17;
-  --ict-green-deep: var(--ict-deep-green);
-  --ict-white: #FFFFFF;
-  --ict-black: #080C0F;
+  --ict-green-deep: #0C1C17;
   --ict-green: #1D664D;
   --ict-paper: #FBFAF5;
   --ink: var(--coop-black); --ink-soft: var(--coop-charcoal);
